@@ -12,6 +12,10 @@ A simple, ephemeral peer-to-peer chat application built with C# and WinUI 3. One
 *   **Active User List:** Displays nicknames of currently connected users (based on recent activity).
 *   **Ephemeral:** Chat history exists only in the host's memory.
 *   **Local Time Display:** Timestamps are shown in the user's local time zone.
+*   **Responsive Theming:** Application appearance fully adapts to the user's Windows theme settings:
+    * Automatic light/dark mode switching
+    * Dynamic accent color adaptation for buttons and UI elements
+    * Logo color variations based on system accent color
 
 ## Technology Stack
 
@@ -21,6 +25,7 @@ A simple, ephemeral peer-to-peer chat application built with C# and WinUI 3. One
 *   **API Server (Host):** ASP.NET Core Web API (embedded)
 *   **Client HTTP:** `System.Net.Http.HttpClient`
 *   **Real-time (Simulated):** HTTP Polling
+*   **Theming:** Windows theme integration via WinUI 3 ThemeResource and ActualTheme systems
 
 ## How it Works
 
@@ -41,6 +46,12 @@ A simple, ephemeral peer-to-peer chat application built with C# and WinUI 3. One
     *   Host API -> `MessageService` adds message to its list.
     *   Client B polls -> GET from Host API -> Receives message from Client A (and any others).
     *   Client A polls -> GET from Host API -> Receives its own message (confirming delivery) and messages from others.
+4.  **Deep Theme Integration:**
+    *   The application automatically detects and applies user's Windows theme preferences.
+    *   UI elements adapt to light or dark mode based on system settings.
+    *   Buttons, controls, and interactive elements adopt the system accent color.
+    *   The application logo dynamically changes colors to complement the user's chosen theme color.
+    *   All visual elements respond to real-time system theme changes.
 
 
 ### Running
@@ -64,6 +75,7 @@ A simple, ephemeral peer-to-peer chat application built with C# and WinUI 3. One
 
 *   Messages sent by any client or the host will appear in all connected instances after a short polling delay.
 *   The active user list will update periodically.
+*   The application appearance will automatically match your Windows theme settings, including accent colors.
 
 ## Known Issues / Limitations
 
@@ -83,4 +95,4 @@ A simple, ephemeral peer-to-peer chat application built with C# and WinUI 3. One
 *   Improve UI/UX.
 *   More robust error handling and connection status reporting.
 *   Consider NAT traversal solutions for connections outside the local network (more complex).
-
+*   Add user-configurable theme options beyond Windows system settings.
