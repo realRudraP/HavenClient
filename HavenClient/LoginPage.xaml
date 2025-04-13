@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="HavenClient.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HavenClient"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left side: Logo -->
+        <Path Data="M 0 0 L 0 -0.75 L 10 -0.75 L 10 -7 L 6 -10 L 2.25 -7 L 2.25 -2.95 L 1.5 -2.95 L 1.5 -7.5 L 6 -11 L 10.75 -7.5 L 10.75 0 M 9.25 -1.45 L 0 -1.45 L 0 -8.25 L 6 -13 L 12.25 -8.25 L 12.25 0 L 11.5 0 L 11.5 -8 L 6 -12 L 0.75 -8 L 0.75 -2.2 L 9.25 -2.2"
+              Fill="{ThemeResource SystemControlForegroundAccentBrush}"
+              Stroke="Transparent"
+              StrokeThickness="0"
+              Stretch="Uniform"
+              Width="250"
+              Height="250"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"/>
+
+        <!-- Right side: Content -->
+        <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" MinWidth="300" MaxWidth="600" Spacing="8">
+
+            <!-- Initial Login Section -->
+            <StackPanel x:Name="InitialLoginPanel" Spacing="8">
+                <TextBlock FontSize="58" FontWeight="Bold" Margin="0,0,0,4">
+                    <Run Text="Welcome to"/>
+                    <Run Text="Haven" Foreground="{ThemeResource SystemAccentColor}"/>
+                </TextBlock>
+                <TextBlock FontSize="16" Margin="0,0,0,24" Text="Your fam's waiting! Let's get you connected. What should we call you?" TextWrapping="Wrap"/>
+                <TextBox x:Name="NameTextBox" PlaceholderText="Enter your awesome nickname..." Margin="5,0,0,16"
+                         MinWidth="300" Width="500"
+                         TextAlignment="Center" HorizontalAlignment="Left"/>
+                <Button x:Name="ProceedButton" Content="Let's Go!" Margin="225,0,0,8"
+                        Style="{ThemeResource AccentButtonStyle}"
+                        Click="ProceedButton_Click" HorizontalAlignment="Left"/>
+                <TextBlock FontSize="12" HorizontalAlignment="Center" Foreground="{ThemeResource TextFillColorDisabledBrush}" TextWrapping="Wrap">
+                    Heads up! Haven might ask to adjust your firewall settings so you can find your friends.
+                </TextBlock>
+            </StackPanel>
+
+            <!-- Connection Choice Section (Initially Hidden) -->
+            <StackPanel x:Name="ConnectionChoicePanel" Visibility="Collapsed" Spacing="12">
+                <TextBlock x:Name="WelcomeUserText" FontSize="24" FontWeight="SemiBold" Text="Alright, [Nickname]!"/>
+                <TextBlock FontSize="16" Text="How do you want to connect?" TextWrapping="Wrap"/>
+
+                <Button x:Name="HostButton" Content="Host a New Chat"
+                        Style="{ThemeResource AccentButtonStyle}"
+                        Click="HostButton_Click" HorizontalAlignment="Stretch"/>
+
+                <TextBlock Text="Or" HorizontalAlignment="Center" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+
+                <TextBlock FontSize="16" Text="Join an Existing Chat:" TextWrapping="Wrap"/>
+                <TextBox x:Name="PeerAddressInput" PlaceholderText="Enter host address (e.g., http://192.168.1.5:5000)"
+                         MinWidth="300" Width="500" HorizontalAlignment="Left"/>
+                <Button x:Name="JoinButton" Content="Join Chat"
+                        Click="JoinButton_Click" HorizontalAlignment="Stretch"/>
+
+                <!-- Optional: Back Button -->
+                <Button x:Name="BackButton" Content="Back" Click="BackButton_Click" HorizontalAlignment="Left" />
+
+            </StackPanel>
+
+            <!-- Status/Error Section (Initially Hidden or shows subtle info) -->
+            <TextBlock x:Name="StatusTextBlock" Margin="0,20,0,0" TextWrapping="Wrap" Visibility="Collapsed"/>
+
+        </StackPanel>
+
+        <!-- Firewall Error Dialog (No changes needed here) -->
+        <ContentDialog
+            x:Name="FirewallErrorDialog"
+            Title="Whoa there, firewall says no!"
+            CloseButtonText="Got it"
+            DefaultButton="Close"
+            >
+            <!-- Set XamlRoot in code-behind -->
+            <StackPanel HorizontalAlignment="Center" Spacing="12">
+                <FontIcon Glyph="" FontSize="48" Foreground="{ThemeResource SystemFillColorCriticalBrush}" />
+                <TextBlock Text="Looks like something went wrong setting up the firewall. Make sure you give Haven permission to do its thing!"
+                           TextWrapping="Wrap" FontSize="16" TextAlignment="Center"/>
+            </StackPanel>
+        </ContentDialog>
+
+        <!-- Generic Error Dialog -->
+        <ContentDialog
+            x:Name="ErrorDialog"
+            Title="Oops!"
+            CloseButtonText="Ok"
+            DefaultButton="Close"
+            >
+            <!-- Set XamlRoot in code-behind -->
+            <TextBlock x:Name="ErrorDialogTextBlock" TextWrapping="Wrap"/>
+        </ContentDialog>
+
+    </Grid>
+</Page>

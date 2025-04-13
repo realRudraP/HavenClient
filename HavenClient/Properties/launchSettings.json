@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "HavenClient (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "HavenClient (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
