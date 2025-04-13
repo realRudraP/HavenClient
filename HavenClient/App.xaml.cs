@@ -25,15 +25,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Documents;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
+  
 namespace HavenClient
 {
-    /// <summary>
-    /// Provides application-specific behavior to supplement the default Application class.
-    /// </summary>
-    public partial class App : Application
+       public partial class App : Application
     {
         private IHost? _webHost;
         private CancellationTokenSource? _cts;
@@ -47,11 +42,7 @@ namespace HavenClient
             this.InitializeComponent();
         }
 
-        /// <summary>
-        /// Invoked when the application is launched.
-        /// </summary>
-        /// <param name="args">Details about the launch request and process.</param>
-        
+            
 
         public async Task StartServerAsync(string url = "http://*:5000")
         {
@@ -84,8 +75,7 @@ namespace HavenClient
                 _webHost = null;
                 _cts?.Dispose();
                 _cts = null;
-                // Handle exceptions (e.g., logging)
-                Console.WriteLine($"Error starting server: {ex.Message}");
+                 Console.WriteLine($"Error starting server: {ex.Message}");
             }
         }
 
@@ -140,8 +130,7 @@ namespace HavenClient
             }
             else
             {
-                // If MainWindow's XAML didn't define a Frame, create one programmatically
-                rootFrame = new Frame();
+                 rootFrame = new Frame();
                 window.Content = rootFrame;
                 return rootFrame;
             }

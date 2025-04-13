@@ -107,12 +107,10 @@ namespace HavenClient
 
         private void MessageService_MessageReceived(object? sender, Message message)
         {
-            // *** ADD THIS DEBUGGING ***
-            System.Diagnostics.Debug.WriteLine($"DEBUG (Host UI Event): Received Message ID {message.Id}, Text: '{message.Text}', Raw Timestamp: {message.Timestamp:o}, Kind: {message.Timestamp.Kind}");
+             System.Diagnostics.Debug.WriteLine($"DEBUG (Host UI Event): Received Message ID {message.Id}, Text: '{message.Text}', Raw Timestamp: {message.Timestamp:o}, Kind: {message.Timestamp.Kind}");
             DateTime checkLocalTime = message.Timestamp.ToLocalTime();
             System.Diagnostics.Debug.WriteLine($"DEBUG (Host UI Event): Calculated Local Time: {checkLocalTime:o}");
-            // **************************
-
+ 
             if (_navParameter?.IsHosting ?? false) // Ensure only host UI adds via event
             {
                 Messages.Add(message);
@@ -121,9 +119,7 @@ namespace HavenClient
             else
             {
                 System.Diagnostics.Debug.WriteLine($"DEBUG: MessageService_MessageReceived called on CLIENT - IGNORING direct add.");
-                // Client adds messages via polling or optimistic send (which we removed)
-                // This event handler is primarily for the Host's UI feedback loop
-            }
+              }
         }
 
         private void SetupPollingTimer()
@@ -159,8 +155,7 @@ namespace HavenClient
             {
                 System.Diagnostics.Debug.WriteLine($"Polling Error: Invalid peer address format: {targetAddress} - {ex.Message}");
                 _pollingTimer?.Stop();
-                // Optionally show error once
-                return;
+                 return;
             }
 
             bool messagesFetched = false;
@@ -181,13 +176,11 @@ namespace HavenClient
                         {
                             System.Diagnostics.Debug.WriteLine($"DEBUG: Processing polled message ID {message.Id}, Sender: '{message.SenderNickname}'");
 
-                            // Check if message with this non-zero ID already exists in our UI list
-                            bool alreadyExists = message.Id != 0 && Messages.Any(m => m.Id == message.Id);
+                             bool alreadyExists = message.Id != 0 && Messages.Any(m => m.Id == message.Id);
 
                             if (!alreadyExists)
                             {
-                                // Determine if it's our own message based on nickname
-                                bool isOwnMessage = message.SenderNickname == _navParameter?.Nickname;
+                                 bool isOwnMessage = message.SenderNickname == _navParameter?.Nickname;
                                 message.IsSentByMe = isOwnMessage; // Set the flag for UI display
 
                                 System.Diagnostics.Debug.WriteLine($"DEBUG: ADDING message ID {message.Id} to UI. IsOwn={isOwnMessage}");
@@ -200,8 +193,7 @@ namespace HavenClient
                                 System.Diagnostics.Debug.WriteLine($"DEBUG: SKIPPING already existing message ID {message.Id}.");
                             }
 
-                            // Always update maxId based on processed messages
-                            if (message.Id > maxId)
+                             if (message.Id > maxId)
                             {
                                 maxId = message.Id;
                             }
@@ -224,26 +216,22 @@ namespace HavenClient
             catch (HttpRequestException httpEx)
             {
                 System.Diagnostics.Debug.WriteLine($"Polling Error (Messages): {httpEx.StatusCode} - {httpEx.Message}");
-                // Consider stopping after N failures
-            }
+             }
             catch (System.Text.Json.JsonException jsonEx)
             {
                 System.Diagnostics.Debug.WriteLine($"Polling JSON Error (Messages): {jsonEx.Message}");
-                // Handle potentially malformed response from server
-            }
+             }
             catch (TaskCanceledException)
             {
                 System.Diagnostics.Debug.WriteLine($"Polling Timeout (Messages): {messagesUri}");
-                // Server might be slow or unresponsive
-            }
+             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Polling Unexpected Error (Messages): {ex.GetType().Name} - {ex.Message}");
             }
 
 
-            // Don't poll users if messages failed due to likely connection loss
-            if (!messagesFetched && receivedMessages == null) return;
+             if (!messagesFetched && receivedMessages == null) return;
 
             try
             {
@@ -262,8 +250,7 @@ namespace HavenClient
             catch (HttpRequestException httpEx) when (httpEx.InnerException is System.Net.Sockets.SocketException)
             {
                 System.Diagnostics.Debug.WriteLine($"Polling Error (Users): Host likely down - {httpEx.Message}");
-                // Message poll likely already stopped the timer
-            }
+             }
             catch (HttpRequestException httpEx)
             {
                 System.Diagnostics.Debug.WriteLine($"Polling Error (Users): {httpEx.StatusCode} - {httpEx.Message}");
@@ -306,8 +293,7 @@ namespace HavenClient
             string? selectedIp = null;
             try
             {
-                // Get all network interfaces
-                var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces()
+                 var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces()
                     .Where(ni => ni.OperationalStatus == OperationalStatus.Up && // Must be operational
                                 (ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || // WiFi
                                  ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet))      // Ethernet
@@ -316,8 +302,7 @@ namespace HavenClient
                 foreach (var ni in networkInterfaces)
                 {
                     var ipProps = ni.GetIPProperties();
-                    // Look for a suitable IPv4 address
-                    var ipv4AddressInfo = ipProps.UnicastAddresses
+                     var ipv4AddressInfo = ipProps.UnicastAddresses
                         .FirstOrDefault(addrInfo => addrInfo.Address.AddressFamily == AddressFamily.InterNetwork && // IPv4
                                                     !System.Net.IPAddress.IsLoopback(addrInfo.Address)); // Not loopback
 
@@ -329,8 +314,7 @@ namespace HavenClient
                     }
                 }
 
-                // Fallback if no preferred interface found (less reliable)
-                if (string.IsNullOrEmpty(selectedIp))
+                 if (string.IsNullOrEmpty(selectedIp))
                 {
                     System.Diagnostics.Debug.WriteLine("No preferred (WiFi/Ethernet) IP found, attempting fallback...");
                     var host = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName());
@@ -405,15 +389,8 @@ namespace HavenClient
 
                     if (response.IsSuccessStatusCode)
                     {
-                        // OPTIONAL: Could try to parse the response if server sends back the created message with ID
-                        // var createdMessage = await response.Content.ReadFromJsonAsync<Message>();
-                        // if(createdMessage != null) messageToSend = createdMessage; // Use server version if available
-
-                        //messageToSend.IsSentByMe = true;
-                        //messageToSend.Timestamp = DateTime.Now; // Use local time for immediate display
-                        //Messages.Add(messageToSend);
-                        //MessagesListView.ScrollIntoView(messageToSend);
-                        MessageInput.Text = "";
+   
+                            MessageInput.Text = "";
                     }
                     else
                     {
